@@ -19,10 +19,10 @@ Claude Code native alternative:
 
 ## Prerequisite — the `wat` CLI
 
-The skills shell out to the `wat` CLI (`@wat/wat`). Install it once and log in:
+The skills shell out to the `wat` CLI (`@wat-toolbox/wat`). Install it once and log in:
 
 ```bash
-npm install -g @wat/wat
+npm install -g @wat-toolbox/wat
 wat login
 ```
 

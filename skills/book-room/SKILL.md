@@ -9,10 +9,10 @@ Create a booking for a WAT meeting room over a start/end time range. Use when th
 
 ## Prerequisite
 
-The `wat` CLI (`@wat/wat`) must be installed and the user logged in:
+The `wat` CLI (`@wat-toolbox/wat`) must be installed and the user logged in:
 
 ```bash
-npm install -g @wat/wat   # if not already installed
+npm install -g @wat-toolbox/wat   # if not already installed
 wat login                 # one-time; mints + stores an API key
 ```
 

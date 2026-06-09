@@ -9,10 +9,10 @@ Resolve a room plus a time window and report the room's free time ranges. Use th
 
 ## Prerequisite
 
-The `wat` CLI (`@wat/wat`) must be installed and the user logged in:
+The `wat` CLI (`@wat-toolbox/wat`) must be installed and the user logged in:
 
 ```bash
-npm install -g @wat/wat   # if not already installed
+npm install -g @wat-toolbox/wat   # if not already installed
 wat login                 # one-time; mints + stores an API key
 ```
 

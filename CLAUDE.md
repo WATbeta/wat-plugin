@@ -4,7 +4,7 @@ Single-plugin [Open Plugin v1](https://github.com/vercel-labs/open-plugin-spec) 
 
 ## What this is
 
-Four Claude Code skills that let an agent book WAT meeting rooms conversationally. They are **thin wrappers** over the [`wat` CLI](https://github.com/WATbeta/wat-cli) (package `@wat/wat`), which itself drives the same public API the WAT Rooms web app uses. The plugin holds **no auth, no secrets, no URLs** — the CLI owns auth (a stored API key from `wat login`) and `--env dev|prod` targeting.
+Four Claude Code skills that let an agent book WAT meeting rooms conversationally. They are **thin wrappers** over the [`wat` CLI](https://github.com/WATbeta/wat-cli) (package `@wat-toolbox/wat`), which itself drives the same public API the WAT Rooms web app uses. The plugin holds **no auth, no secrets, no URLs** — the CLI owns auth (a stored API key from `wat login`) and `--env dev|prod` targeting.
 
 ## Skills
 
