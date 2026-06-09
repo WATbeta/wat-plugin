@@ -1,0 +1,20 @@
+{
+  "name": "wat",
+  "version": "0.1.0",
+  "description": "Book WAT meeting rooms from Claude Code — check availability, book, list, and manage your bookings via the wat CLI.",
+  "author": {
+    "name": "Codika",
+    "email": "tools@codika.io",
+    "url": "https://codika.io"
+  },
+  "homepage": "https://github.com/WATbeta/wat-plugin",
+  "repository": "https://github.com/WATbeta/wat-plugin",
+  "license": "MIT",
+  "keywords": [
+    "wat",
+    "meeting-rooms",
+    "booking",
+    "scheduling",
+    "cli"
+  ]
+}
