@@ -13,7 +13,7 @@ Four Claude Code skills that let an agent book WAT meeting rooms conversationall
 | `skills/list-rooms` | `wat rooms list` |
 | `skills/check-availability` | `wat availability --room --from --to [--tz]` |
 | `skills/book-room` | `wat bookings create --room --start --end [--title] [--tz]` |
-| `skills/my-bookings` | `wat bookings list --mine`, `wat bookings cancel <id>` |
+| `skills/my-bookings` | `wat bookings list --mine`, `wat bookings edit <id>`, `wat bookings cancel <id>` |
 
 ## Conventions (carry these when editing skills)
 

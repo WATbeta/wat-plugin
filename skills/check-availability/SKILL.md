@@ -38,11 +38,11 @@ The CLI defaults to production. Add `--env dev` only when the user explicitly as
    Optional: `--tz "<IANA>"` to change the zone bare times are read in; `--env dev` to target staging.
 
 2. Parse the JSON envelope:
-   - Success: `{ "success": true, "data": { "room": { "id", "name" }, "tz", "free": [ { "start", "end" } ], "busy": ... } }` — `free`/`busy` carry ISO instants.
+   - Success: `{ "success": true, "data": { "room": { "id", "name" }, "tz", "free": [ { "start", "end" } ], "busy": ... } }` — `free`/`busy` carry ISO instants. Results are **clipped to opening hours 06:00–22:00 Europe/Brussels**: time outside that window never appears as free, and bookings outside it are rejected — never propose slots outside 06:00–22:00 Brussels.
    - Failure: `{ "success": false, "error": { "code", "message", "nextAction"? } }`. Common codes: `ROOM_NOT_FOUND`, `AMBIGUOUS_ROOM` (pass the room id instead), `INVALID_TIME`, `unauthenticated`.
 
 3. On `AMBIGUOUS_ROOM`, run `list-rooms` to show the candidate ids, then re-run with the id.
 
 ## Output format
 
-Plain language. State the room and the window's timezone, then list the free ranges as readable local times (e.g. "Mon 09 Jun, 10:00 → 12:00"). If `free` is empty, say the room is fully booked over that window. Offer to book one of the free ranges (hand off to the `book-room` skill).
+Plain language. State the room and the window's timezone, then list the free ranges as readable local times (e.g. "Mon 09 Jun, 10:00 → 12:00"). If `free` is empty, say the room has no bookable time in that window (it may be fully booked, or the window may fall outside the 06:00–22:00 Brussels opening hours). Offer to book one of the free ranges (hand off to the `book-room` skill).

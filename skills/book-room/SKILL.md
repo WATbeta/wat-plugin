@@ -1,6 +1,6 @@
 ---
 name: book-room
-description: Book a WAT meeting room for a time range. Use when the user wants to reserve, book, or schedule a room (e.g. "book Room A tomorrow 10–11 for a sync"). Wraps `wat bookings create`; surfaces the 409 slot-conflict and daily-budget errors cleanly.
+description: Book a WAT meeting room for a time range. Use when the user wants to reserve, book, or schedule a room (e.g. "book Room A tomorrow 10–11 for a sync"). Wraps `wat bookings create`; surfaces the slot-overlap, daily-budget, and opening-hours errors cleanly.
 ---
 
 # Book Room
@@ -25,7 +25,7 @@ The CLI defaults to production. Add `--env dev` only when the user explicitly as
 ## Inputs to resolve first
 
 - **Room** — name or id. If the name is fuzzy or might be ambiguous, run `list-rooms` first.
-- **Start / end** — bare datetimes like `2026-06-09T10:00` are read as **Europe/Brussels** wall-clock. Use `--tz <IANA>` to read them in another zone, or include an explicit offset to pin the instant. Minimum booking length is 15 minutes; bookings must be in the future and within the booking horizon (30 days).
+- **Start / end** — bare datetimes like `2026-06-09T10:00` are read as **Europe/Brussels** wall-clock. Use `--tz <IANA>` to read them in another zone, or include an explicit offset to pin the instant. Booking rules: minimum length 15 minutes; must be in the future; within the booking horizon (30 days); AND entirely within opening hours **06:00–22:00 Europe/Brussels** (a booking ending exactly at 22:00 is fine).
 - **Title** (optional) — only the booker and admins ever see the title; other members see only the booker's name.
 
 If anything is ambiguous (which room, which day, how long), confirm with the user before booking — a booking is a real side effect.
@@ -45,12 +45,17 @@ If anything is ambiguous (which room, which day, how long), confirm with the use
    - Failure: `{ "success": false, "status"?, "error": { "code", "message", "nextAction"? } }`.
 
 3. Handle the expected failures clearly, do not retry blindly:
-   - **Slot conflict (409, `conflict`)** — the room was just taken for an overlapping range. Tell the user the slot is no longer free and offer to run `check-availability` for nearby open ranges. Do not silently retry.
-   - **Daily budget** — each member has a daily booking budget (default 2 hours per Brussels day). If the booking would exceed it, the API returns a budget message; relay it and suggest a shorter range or a different day.
+   - **Slot taken (409, `overlap`)** — the room was just taken for an overlapping range. Tell the user the slot is no longer free and offer to run `check-availability` for nearby open ranges. Do not silently retry.
+   - **Daily budget (409, `budget`)** — each member has a daily booking budget (default 2 hours per Brussels calendar day). If the booking would exceed it, relay the message and suggest a shorter range or a different day.
+   - **Outside opening hours (400, `outside_hours`)** — the range falls outside 06:00–22:00 Europe/Brussels. Propose the nearest in-hours slot instead.
    - `INVALID_TIME` — the start/end couldn't be parsed; re-confirm the datetimes.
    - `ROOM_NOT_FOUND` / `AMBIGUOUS_ROOM` — run `list-rooms` and re-run with an exact name or id.
    - `unauthenticated` — the user needs to run `wat login`.
 
+## Changing an existing booking
+
+To reschedule a booking, do not cancel and rebook — the `wat` CLI (v0.2.0+) has `wat bookings edit <id> [--room --start --end --title]` (PATCH-backed, same validation including opening hours). See the `my-bookings` skill for rescheduling guidance.
+
 ## Output format
 
-On success: a one-line confirmation with the room name, the local start → end, and the booking `id` (the user needs the id to cancel). On failure: relay `error.message` plainly and offer the most useful next step (check availability, pick a shorter slot, log in).
+On success: a one-line confirmation with the room name, the local start → end, and the booking `id` (the user needs the id to cancel or edit). On failure: relay `error.message` plainly and offer the most useful next step (check availability, pick a shorter slot, log in).

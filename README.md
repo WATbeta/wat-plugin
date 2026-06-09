@@ -44,14 +44,16 @@ The CLI — and therefore the skills — default to the **production** deploymen
 |---|---|---|
 | `wat:list-rooms` | List the meeting rooms with capacity + description. | `wat rooms list` |
 | `wat:check-availability` | Resolve a room + time window and summarize the free slots. | `wat availability --room --from --to [--tz]` |
-| `wat:book-room` | Create a booking; surfaces the 409 slot-conflict and daily-budget errors cleanly. | `wat bookings create --room --start --end [--title] [--tz]` |
-| `wat:my-bookings` | List the caller's own bookings and cancel one by id. | `wat bookings list --mine`, `wat bookings cancel <id>` |
+| `wat:book-room` | Create a booking; surfaces the slot-overlap, daily-budget, and opening-hours errors cleanly. | `wat bookings create --room --start --end [--title] [--tz]` |
+| `wat:my-bookings` | List the caller's own bookings, reschedule one, or cancel one by id. | `wat bookings list --mine`, `wat bookings edit <id>`, `wat bookings cancel <id>` |
 
 Every skill calls the CLI with `--json` and parses the `{ success, data | error }` envelope, so results and errors are handled deterministically.
 
 ## Time interpretation
 
 Bare datetimes (e.g. `2026-06-09T10:00`) are read as **Europe/Brussels** wall-clock by the CLI, matching the web UI. Pass `--tz <IANA>` to read bare times in another zone, or include an explicit offset (`2026-06-09T10:00+02:00`) to pin the instant.
+
+Rooms have opening hours of **06:00–22:00 Europe/Brussels**: availability results are clipped to that window, and bookings outside it are rejected (`outside_hours`).
 
 ## License
 

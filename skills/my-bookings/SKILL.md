@@ -1,11 +1,11 @@
 ---
 name: my-bookings
-description: List the caller's own WAT room bookings and cancel one by id. Use when the user asks "what have I booked", "show my reservations", or "cancel my booking". Wraps `wat bookings list --mine` and `wat bookings cancel <id>`.
+description: List the caller's own WAT room bookings, reschedule one, or cancel one by id. Use when the user asks "what have I booked", "show my reservations", "move my booking", or "cancel my booking". Wraps `wat bookings list --mine`, `wat bookings edit <id>`, and `wat bookings cancel <id>`.
 ---
 
 # My Bookings
 
-List the caller's own bookings and cancel a booking by id. Use when the user wants to see or cancel their reservations.
+List the caller's own bookings, reschedule one, or cancel one by id. Use when the user wants to see, change, or cancel their reservations.
 
 ## Prerequisite
 
@@ -35,6 +35,16 @@ Optional filters: `--room "<name|id>"`, `--from "<when>"`, `--to "<when>"`, `--t
 Parse the envelope:
 - Success: `{ "success": true, "data": { "tz", "bookings": [ { "id", "room_id", "title", "starts_at", "ends_at", "status", "is_mine", "is_maintenance", "booker_name" } ] } }`. Times are ISO instants; render them in the returned `tz` (Europe/Brussels by default).
 - Failure: `{ "success": false, "error": { "code", "message", "nextAction"? } }`.
+
+## Rescheduling a booking
+
+To move a booking (or change its room/title), prefer editing over cancel + rebook — it keeps the same booking id and atomically swaps the slot. Requires `wat` CLI v0.2.0+:
+
+```bash
+wat bookings edit <id> [--room "<name|id>"] [--start "<when>"] [--end "<when>"] [--title "<title>"] --json
+```
+
+Pass only the fields to change; get the `id` from the list above (never guess). Bare datetimes are Europe/Brussels wall-clock (`--tz <IANA>` overrides). The new range goes through the same validation as creating: minimum 15 minutes, in the future, within the 30-day horizon, and within opening hours **06:00–22:00 Europe/Brussels**. Failures use the same codes as `book-room`: `overlap` (409, slot taken), `budget` (409, over the 2h/day Brussels cap), `outside_hours` (400). Confirm the target booking and new time with the user before editing — it is a real side effect.
 
 ## Cancelling a booking
 
