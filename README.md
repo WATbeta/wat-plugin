@@ -26,7 +26,7 @@ npm install -g @wat-toolbox/wat
 wat login
 ```
 
-`wat login` runs an email-OTP flow (and, on first enrollment, asks for the WAT signup code), then mints and stores an API key in `~/.config/wat/config.json` (mode 0600). **The plugin inherits this stored key** — you authenticate once via the CLI, and every skill reuses it. No secrets live in the plugin.
+`wat login` runs an email-OTP flow (first enrollment is automatic when the email is on WAT's resident list — a company domain or an admin-added address), then mints and stores an API key in `~/.config/wat/config.json` (mode 0600). **The plugin inherits this stored key** — you authenticate once via the CLI, and every skill reuses it. No secrets live in the plugin.
 
 > **No shell access?** Hosts without a terminal (claude.ai, Claude Desktop) can use the [WAT Rooms MCP server](https://mcp.wat.com) instead — same tools, zero installation, OAuth sign-in.
 

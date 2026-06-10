@@ -1,6 +1,6 @@
 {
   "name": "wat",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Book WAT meeting rooms from Claude Code \u2014 check availability, book, list, and manage your bookings via the wat CLI.",
   "author": {
     "name": "Codika",

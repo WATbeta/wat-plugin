@@ -20,7 +20,7 @@ The skill inherits the CLI's stored API key (which identifies the member) — ne
 
 1. Ask the user for their WAT account email.
 2. `wat login --email <email> --request-code --json` — sends a 6-digit code to their inbox.
-3. Ask the user for the code, then `wat login --email <email> --code <code> --json`. A `NOT_AUTHORIZED` error means first enrollment: ask the user for the WAT signup code and re-run with `--signup-code <code>` (never guess it).
+3. Ask the user for the code, then `wat login --email <email> --code <code> --json`. A `NOT_AUTHORIZED` error means the email may not enroll: it is not on WAT's resident list. Tell the user to ask a WAT admin to add their email or company domain (web app, Admin → Access), then retry from step 2 — never retry blindly.
 
 ## Targeting (dev vs prod)
 
