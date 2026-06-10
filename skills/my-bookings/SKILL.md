@@ -16,7 +16,11 @@ npm install -g @wat-toolbox/wat   # if not already installed
 wat login                 # one-time; mints + stores an API key
 ```
 
-The skill inherits the CLI's stored API key (which identifies the member) — never handle secrets here. If `wat` is not found or no key is stored, tell the user to run the two commands above and stop.
+The skill inherits the CLI's stored API key (which identifies the member) — never handle secrets here. If `wat` is not on the PATH, fall back to `npx -y @wat-toolbox/wat <command>` (same tool, same stored login) and suggest the global install once the task is done. If no key is stored (`unauthenticated` / "Not logged in"), run the login handoff yourself instead of stopping:
+
+1. Ask the user for their WAT account email.
+2. `wat login --email <email> --request-code --json` — sends a 6-digit code to their inbox.
+3. Ask the user for the code, then `wat login --email <email> --code <code> --json`. A `NOT_AUTHORIZED` error means first enrollment: ask the user for the WAT signup code and re-run with `--signup-code <code>` (never guess it).
 
 ## Targeting (dev vs prod)
 
