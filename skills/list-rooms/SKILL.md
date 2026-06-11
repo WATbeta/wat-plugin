@@ -41,11 +41,11 @@ The CLI defaults to the production deployment. To target the staging/dev deploym
    ```
 
 2. Parse the JSON envelope:
-   - Success: `{ "success": true, "data": { "rooms": [ { "id", "name", "capacity", "description", "color" } ] } }`
+   - Success: `{ "success": true, "data": { "rooms": [ { "id", "name", "capacity", "description", "color", "image_url" } ] } }`
    - Failure: `{ "success": false, "error": { "code", "message", "nextAction"? } }`
 
 3. On failure, relay `error.message` (and `nextAction` if present) plainly. A `code` of `unauthenticated` means the user needs to run `wat login`.
 
 ## Output format
 
-A short plain-language list, one room per line: name, capacity (seats) if present, and description if present. Mention the room `id` only if the user will need it for a follow-up command (e.g. to disambiguate two rooms with the same name). If there are no rooms, say so.
+A short plain-language list, one room per line: name, capacity (seats) if present, and description if present. `image_url` is the room's photo — mention or link it only when the user asks what a room looks like. Mention the room `id` only if the user will need it for a follow-up command (e.g. to disambiguate two rooms with the same name). If there are no rooms, say so.
