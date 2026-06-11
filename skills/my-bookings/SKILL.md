@@ -48,7 +48,7 @@ To move a booking (or change its room/title), prefer editing over cancel + reboo
 wat bookings edit <id> [--room "<name|id>"] [--start "<when>"] [--end "<when>"] [--title "<title>"] --json
 ```
 
-Pass only the fields to change; get the `id` from the list above (never guess). Bare datetimes are Europe/Brussels wall-clock (`--tz <IANA>` overrides). The new range goes through the same validation as creating: minimum 15 minutes, in the future, within the 30-day horizon, and within opening hours **06:00–22:00 Europe/Brussels**. Failures use the same codes as `book-room`: `overlap` (409, slot taken), `budget` (409, over the 2h/day Brussels cap), `outside_hours` (400). Confirm the target booking and new time with the user before editing — it is a real side effect.
+Pass only the fields to change; get the `id` from the list above (never guess). Bare datetimes are Europe/Brussels wall-clock (`--tz <IANA>` overrides). The new range goes through the same validation as creating: minimum 15 minutes, in the future, within the 30-day horizon, and within opening hours **06:00–22:00 Europe/Brussels**. Failures use the same codes as `book-room`: `overlap` (409, slot taken), `budget` (409, over the 2h/day Brussels cap — members only, admins are exempt), `outside_hours` (400). Confirm the target booking and new time with the user before editing — it is a real side effect.
 
 ## Cancelling a booking
 
