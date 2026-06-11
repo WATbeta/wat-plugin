@@ -37,7 +37,7 @@ wat bookings list --mine --json
 Optional filters: `--room "<name|id>"`, `--from "<when>"`, `--to "<when>"`, `--tz "<IANA>"` (zone for bare times + display), `--env dev`.
 
 Parse the envelope:
-- Success: `{ "success": true, "data": { "tz", "bookings": [ { "id", "room_id", "title", "starts_at", "ends_at", "status", "is_mine", "is_maintenance", "booker_name" } ] } }`. Times are ISO instants; render them in the returned `tz` (Europe/Brussels by default).
+- Success: `{ "success": true, "data": { "tz", "bookings": [ { "id", "room_id", "title", "starts_at", "ends_at", "status", "is_mine", "is_maintenance", "booker_name", "guest_emails" } ] } }`. Times are ISO instants; render them in the returned `tz` (Europe/Brussels by default). `guest_emails` lists the booking's invitees (populated on the caller's own bookings).
 - Failure: `{ "success": false, "error": { "code", "message", "nextAction"? } }`.
 
 ## Rescheduling a booking
@@ -45,10 +45,12 @@ Parse the envelope:
 To move a booking (or change its room/title), prefer editing over cancel + rebook — it keeps the same booking id and atomically swaps the slot. Requires `wat` CLI v0.2.0+:
 
 ```bash
-wat bookings edit <id> [--room "<name|id>"] [--start "<when>"] [--end "<when>"] [--title "<title>"] --json
+wat bookings edit <id> [--room "<name|id>"] [--start "<when>"] [--end "<when>"] [--title "<title>"] [--guests "<a@x.com,b@y.be>"] --json
 ```
 
-Pass only the fields to change; get the `id` from the list above (never guess). Bare datetimes are Europe/Brussels wall-clock (`--tz <IANA>` overrides). The new range goes through the same validation as creating: minimum 15 minutes, in the future, within the 30-day horizon, and within opening hours **06:00–22:00 Europe/Brussels**. Failures use the same codes as `book-room`: `overlap` (409, slot taken), `budget` (409, over the 2h/day Brussels cap), `outside_hours` (400). Confirm the target booking and new time with the user before editing — it is a real side effect.
+Pass only the fields to change; get the `id` from the list above (never guess). Bare datetimes are Europe/Brussels wall-clock (`--tz <IANA>` overrides). The new range goes through the same validation as creating: minimum 15 minutes, in the future, within the 30-day horizon, and within opening hours **06:00–22:00 Europe/Brussels**. Failures use the same codes as `book-room`: `overlap` (409, slot taken), `budget` (409, over the 2h/day Brussels cap), `outside_hours` (400), `invalid_guests` / `too_many_guests` (422). Confirm the target booking and new time with the user before editing — it is a real side effect.
+
+**Guests are a FULL replacement** (CLI v0.5.0+): `--guests` overwrites the whole list, so to ADD someone, read the booking's current `guest_emails` from the list first and pass the combined list; `--guests ""` removes everyone. Newly added guests get an invitation email; removed guests get a cancellation of their invite — confirm guest changes with the user.
 
 ## Cancelling a booking
 
