@@ -51,7 +51,7 @@ If anything is ambiguous (which room, which day, how long, who to invite), confi
 
 3. Handle the expected failures clearly, do not retry blindly:
    - **Slot taken (409, `overlap`)** — the room was just taken for an overlapping range. Tell the user the slot is no longer free and offer to run `check-availability` for nearby open ranges. Do not silently retry.
-   - **Daily budget (409, `budget`)** — each member has a daily booking budget (default 2 hours per Brussels calendar day). If the booking would exceed it, relay the message and suggest a shorter range or a different day.
+   - **Daily budget (409, `budget`)** — each member has a daily booking budget (default 2 hours per Brussels calendar day; admins are exempt). If the booking would exceed it, relay the message and suggest a shorter range or a different day.
    - **Outside opening hours (400, `outside_hours`)** — the range falls outside 06:00–22:00 Europe/Brussels. Propose the nearest in-hours slot instead.
    - **Bad guest list (422, `invalid_guests` / `too_many_guests`)** — a guest address is malformed (the message names it) or the list exceeds 10. Fix the flagged address / trim the list with the user and retry.
    - `INVALID_TIME` — the start/end couldn't be parsed; re-confirm the datetimes.
