@@ -20,7 +20,7 @@ The skill inherits the CLI's stored API key — never handle secrets here. If `w
 
 1. Ask the user for their WAT account email.
 2. `wat login --email <email> --request-code --json` — sends a 6-digit code to their inbox.
-3. Ask the user for the code, then `wat login --email <email> --code <code> --json`. A `NOT_AUTHORIZED` error means the email may not enroll: it is not on WAT's resident list. An access request was automatically filed with the WAT admins — tell the user to watch for the "you've been accepted" email, then retry from step 2 once it arrives. Never retry blindly: retrying does not speed up the review.
+3. Ask the user for the code, then `wat login --email <email> --code <code> --json`. A `NOT_AUTHORIZED` error means the email may not enroll: it is not on WAT's resident list. An access request was automatically filed with the WAT admins. Tell the user to watch for the "you've been accepted" email, then retry from step 2 once it arrives. Never retry blindly: retrying does not speed up the review.
 
 ## Targeting (dev vs prod)
 
